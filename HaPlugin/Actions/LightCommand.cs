@@ -13,7 +13,6 @@
 
         protected override Boolean OnLoad()
         {
-            PluginLog.Verbose($"LightCommand.OnLoad()");
             this.plugin = base.Plugin as HaPlugin;
 
             this.plugin.StatesReady += (sender, e) =>
@@ -24,8 +23,8 @@
                     var state = group.Value;
                     if (state.Entity_Id.StartsWith("light."))
                     {
-                        PluginLog.Verbose($"{state.Entity_Id}");
-                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Lights");
+                        // TODO: filter supported_color_modes["onoff"]
+                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Light");
                     }
                 }
             };
@@ -38,19 +37,12 @@
         protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize)
         {
             if (actionParameter.IsNullOrEmpty())
-            {
-                return "";
-
-            }
+            { return ""; }
 
             var entityState = this.plugin.States[actionParameter];
             return $"{entityState.State} {entityState.FriendlyName}";
         }
 
-        protected override void RunCommand(String actionParameter)
-        {
-            this.plugin.LightToggle(actionParameter);
-            this.ActionImageChanged(actionParameter);
-        }
+        protected override void RunCommand(String actionParameter) => this.plugin.LightToggle(actionParameter);
     }
 }

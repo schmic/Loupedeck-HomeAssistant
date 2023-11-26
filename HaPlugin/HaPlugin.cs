@@ -18,8 +18,8 @@ namespace Loupedeck.HomeAssistant
         // Gets a value indicating whether this is a Universal plugin or an Application plugin.
         public override Boolean HasNoApplication => true;
 
-        private readonly String Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI5ZTQ5N2VhNzE3MzU0ODNhYWU2ZWY4ZGNmNTgyMWIwYSIsImlhdCI6MTY5OTU2MzczNywiZXhwIjoyMDE0OTIzNzM3fQ.gROeLs3aW9RhDVB4gCwJTosKoSoYZ6SwK5yj2ccLx0s";
-        private readonly WebSocket WebSocket = new WebSocket("wss://ha.home.schmic.eu/api/websocket");
+        private String Token;
+        private WebSocket WebSocket;
 
         public HaPlugin()
         {
@@ -27,7 +27,21 @@ namespace Loupedeck.HomeAssistant
             PluginResources.Init(this.Assembly);
         }
 
-        public override void Load() => this.SetupWebsocket();
+        public override void Load()
+        {
+            var Config = HaConfig.Read();
+
+            if (Config == null)
+            {
+                this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Configuration could not be read.", "https://github.com/schmic/Loupedeck-HomeAssistant/wiki", "Help");
+                return;
+            }
+
+            this.Token = Config.Token;
+            this.SetupWebsocket($"{Config.Url}websocket".Replace("http", "ws"));
+        }
+
+        public override void Unload() => this.WebSocket.Close();
 
         private enum Events : Int32
         {
@@ -39,10 +53,10 @@ namespace Loupedeck.HomeAssistant
         public event EventHandler<EventArgs> StatesReady;
         public event EventHandler<StateChangedEventArgs> StateChanged;
 
-        public void SetupWebsocket()
+        private void SetupWebsocket(String url)
         {
-            PluginLog.Verbose("SetupWebsocket()");
-
+            PluginLog.Verbose($"SetupWebsocket(): [url: {url}]");
+            this.WebSocket = new WebSocket(url);
             this.WebSocket.Log.Level = LogLevel.Info;
             this.WebSocket.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
             this.WebSocket.SslConfiguration.ServerCertificateValidationCallback = null;
@@ -68,14 +82,14 @@ namespace Loupedeck.HomeAssistant
                 {
                     var haEvent = data["event"]["data"].ToObject<HaEvent>();
                     var haState = haEvent.State;
-                    PluginLog.Verbose($"state_changed [{haState.Entity_Id}: {haState.State}]");
+                    //PluginLog.Verbose($"state_changed [{haState.Entity_Id}: {haState.State}]");
                     this.States[haState.Entity_Id] = haState;
                     this.StateChanged?.Invoke(null, StateChangedEventArgs.Create(haState.Entity_Id));
                 }
-                else
-                {
-                    PluginLog.Verbose($"Unhandled haEventType: {haEventType}");
-                }
+                //else
+                //{
+                //    PluginLog.Verbose($"Unhandled haEventType: {haEventType}");
+                //}
             }
             else if (type.Equals("result"))
             {
@@ -101,11 +115,11 @@ namespace Loupedeck.HomeAssistant
                 {
                     PluginLog.Info("Event Subscription Success: " + result_status);
                 }
-                else
-                {
-                    PluginLog.Warning("Unknown ResultID: " + result_id);
-                    PluginLog.Warning("Event Data:\n" + data);
-                }
+                //else
+                //{
+                //    PluginLog.Warning("Unknown ResultID: " + result_id);
+                //    PluginLog.Warning("Event Data:\n" + data);
+                //}
             }
             else if (type.Equals("auth_required"))
             {
@@ -141,9 +155,6 @@ namespace Loupedeck.HomeAssistant
             }
         }
 
-        // This method is called when the plugin is unloaded during the Loupedeck service shutdown.
-        public override void Unload() => this.WebSocket.Close();
-
         private Int32 id = 2000;
 
         public void LightToggle(String entity_id)
@@ -160,6 +171,21 @@ namespace Loupedeck.HomeAssistant
 
             this.WebSocket.Send(serivce_req.ToString());
         }
+        public void LightBrightness(String entity_id, Int32 brightness)
+        {
+            var serivce_req = new JObject {
+                { "id", ++this.id },
+                { "type", "call_service" },
+                { "domain", "light" },
+                { "service", "turn_on" },
+                { "service_data", new JObject { { "brightness", brightness} } },
+                { "target", new JObject { { "entity_id", entity_id } } }
+            };
+
+            PluginLog.Verbose($"LightBrightness: [entity_id: {entity_id}] [id: {this.id}] [brightness: {brightness}]");
+
+            this.WebSocket.Send(serivce_req.ToString());
+        }
 
         public void SwitchToggle(String entity_id)
         {
@@ -172,6 +198,21 @@ namespace Loupedeck.HomeAssistant
             };
 
             PluginLog.Verbose($"SwitchToggle: [entity_id: {entity_id}] [id: {this.id}]");
+
+            this.WebSocket.Send(serivce_req.ToString());
+        }
+        public void ClimateTemperature(String entity_id, Int32 temperature)
+        {
+            var serivce_req = new JObject {
+                { "id", ++this.id },
+                { "type", "call_service" },
+                { "domain", "climate" },
+                { "service", "set_temperature" },
+                { "service_data", new JObject { { "temperature", temperature} } },
+                { "target", new JObject { { "entity_id", entity_id } } }
+            };
+
+            PluginLog.Verbose($"ClimateTemperature: [entity_id: {entity_id}] [id: {this.id}] [temperature: {temperature}]");
 
             this.WebSocket.Send(serivce_req.ToString());
         }

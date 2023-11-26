@@ -13,7 +13,6 @@
 
         protected override Boolean OnLoad()
         {
-            PluginLog.Verbose($"SwitchCommand.OnLoad()");
             this.plugin = base.Plugin as HaPlugin;
 
             this.plugin.StatesReady += (sender, e) =>
@@ -24,8 +23,7 @@
                     var state = group.Value;
                     if (state.Entity_Id.StartsWith("switch."))
                     {
-                        PluginLog.Verbose($"{state.Entity_Id}");
-                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Switches");
+                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Switch");
                     }
                 }
             };
@@ -38,19 +36,12 @@
         protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize)
         {
             if (actionParameter.IsNullOrEmpty())
-            {
-                return "";
-
-            }
+            { return ""; }
 
             var entityState = this.plugin.States[actionParameter];
             return $"{entityState.State} {entityState.FriendlyName}";
         }
 
-        protected override void RunCommand(String actionParameter)
-        {
-            this.plugin.SwitchToggle(actionParameter);
-            this.ActionImageChanged(actionParameter);
-        }
+        protected override void RunCommand(String actionParameter) => this.plugin.SwitchToggle(actionParameter);
     }
 }
