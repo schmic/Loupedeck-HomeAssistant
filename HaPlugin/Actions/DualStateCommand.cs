@@ -7,6 +7,9 @@
 
     abstract public class DualStateCommand : PluginMultistateDynamicCommand
     {
+        protected BitmapColor BgColor_off = new BitmapColor(22, 33, 38);
+        protected BitmapColor BgColor_on = new BitmapColor(73, 27, 74);
+
         protected HaPlugin plugin;
         protected readonly String type;
 
@@ -41,7 +44,6 @@
 
             foreach (KeyValuePair<String, Json.HaState> group in this.plugin.States)
             {
-
                 if (!group.Key.StartsWith($"{this.type.ToLower()}."))
                 { continue; }
 
@@ -64,35 +66,36 @@
             this.ActionImageChanged(e.Entity_Id);
         }
 
-        protected override BitmapImage GetCommandImage(String entity_id, Int32 stateIdx, PluginImageSize imageSize)
+        protected override BitmapImage GetCommandImage(String entity_id, PluginImageSize imageSize)
         {
-
             if (entity_id.IsNullOrEmpty())
-            { return base.GetCommandImage(entity_id, stateIdx, imageSize); }
+            { return base.GetCommandImage(entity_id, imageSize); }
 
-            var BgColor_on = new BitmapColor(73, 27, 74);
-            var BgColor_off = new BitmapColor(22, 33, 38);
-            var isOn = Convert.ToBoolean(stateIdx);
-
+            var isOn = this.IsOn(entity_id);
             var entity_friendly_name = this.plugin.States[entity_id].FriendlyName;
+
             var entity_img = isOn ?
-                EmbeddedResources.ReadImage("Loupedeck.HomeAssistant.Resources.switch_on.png") :
-                EmbeddedResources.ReadImage("Loupedeck.HomeAssistant.Resources.switch_off.png");
+                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.type.ToLower()}_on.png") :
+                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.type.ToLower()}_off.png");
+
+            var bg_color = isOn ? this.BgColor_on : this.BgColor_off;
 
             var bitmapBuilder = new BitmapBuilder(imageSize);
-            bitmapBuilder.FillRectangle(0, 0, bitmapBuilder.Width, bitmapBuilder.Height, isOn ? BgColor_on : BgColor_off);
+            bitmapBuilder.FillRectangle(0, 0, bitmapBuilder.Width, bitmapBuilder.Height, bg_color);
             bitmapBuilder.DrawImage(entity_img, bitmapBuilder.Width / 2 - entity_img.Width / 2, 4);
             bitmapBuilder.DrawText(entity_friendly_name, 0, bitmapBuilder.Height / 4, bitmapBuilder.Width, bitmapBuilder.Height);
             return bitmapBuilder.ToImage();
         }
 
-        protected override String GetCommandDisplayName(String entity_id, Int32 stateIdx, PluginImageSize imageSize)
+        protected override String GetCommandDisplayName(String entity_id, PluginImageSize imageSize)
         {
             if (entity_id.IsNullOrEmpty())
             { return ""; }
 
-            var entityState = this.plugin.States[entity_id];
-            return $"{entityState.FriendlyName}";
+            var FriendlyName = this.plugin.States[entity_id].FriendlyName;
+            return $"{FriendlyName}";
         }
+
+        private Boolean IsOn(String entity_id) => this.plugin.States[entity_id].State.Equals("on");
     }
 }

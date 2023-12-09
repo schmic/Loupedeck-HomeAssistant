@@ -107,6 +107,8 @@
     <Content Include="metadata\Icon256x256.png" />
     <Content Include="metadata\Icon32x32.png" />
     <Content Include="metadata\Icon48x48.png" />
+    <EmbeddedResource Include="Resources\light_off.png" />
+    <EmbeddedResource Include="Resources\light_on.png" />
     <EmbeddedResource Include="Resources\switch_off.png" />
     <EmbeddedResource Include="Resources\switch_on.png" />
   </ItemGroup>
