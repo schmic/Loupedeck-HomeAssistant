@@ -48,3 +48,6 @@ Someone explained it [here](https://community.home-assistant.io/t/how-to-get-lon
     - with sleeping devices this can take a couple of minutes depending on your configuration
 - only tested with Windows 11
 - only tested with Loupedeck Live
+
+# Icons
+All icons used from the [Material Design Icons](https://pictogrammers.com/docs/general/about/) group and are [licensed](https://github.com/Templarian/MaterialDesign/blob/master/LICENSE) by them.
