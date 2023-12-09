@@ -15,6 +15,12 @@ Supported entities:
 The plugin communicates via the [Websocket API](https://developers.home-assistant.io/docs/api/websocket/) of Home-Assistant.
 State changes are immediately reflect on your Loupedeck display.
 
+## Installation
+- download the latest .lplug4 asset [here](https://github.com/schmic/Loupedeck-HomeAssistant/releases/latest)
+- double click to install into the Loupedeck software
+
+This plugin is not yet published to the official Loupedeck Store.
+
 ## Configuration
 
 - Create the following path & file in your home folder:
