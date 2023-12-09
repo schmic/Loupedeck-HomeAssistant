@@ -67,6 +67,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -82,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Actions\ClimateAdjustment.cs" />
     <Compile Include="Actions\DimmerAdjustment.cs" />
+    <Compile Include="Actions\DualStateCommand.cs" />
     <Compile Include="Actions\SwitchCommand.cs" />
     <Compile Include="Actions\LightCommand.cs" />
     <Compile Include="Events\StateChangedEventArgs.cs" />
@@ -105,6 +107,8 @@
     <Content Include="metadata\Icon256x256.png" />
     <Content Include="metadata\Icon32x32.png" />
     <Content Include="metadata\Icon48x48.png" />
+    <EmbeddedResource Include="Resources\switch_off.png" />
+    <EmbeddedResource Include="Resources\switch_on.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

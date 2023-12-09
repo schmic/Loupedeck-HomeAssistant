@@ -38,7 +38,7 @@ namespace Loupedeck.HomeAssistant
             }
 
             this.Token = Config.Token;
-            this.SetupWebsocket($"{Config.Url}websocket".Replace("http", "ws"));
+            this.SetupWebsocket(Config.Uri.ToString());
         }
 
         public override void Unload() => this.WebSocket.Close();
@@ -67,7 +67,7 @@ namespace Loupedeck.HomeAssistant
             this.WebSocket.Connect();
         }
 
-        private void OnErrorHdl(Object sender, ErrorEventArgs e) => PluginLog.Error("### error:" + e);
+        private void OnErrorHdl(Object sender, ErrorEventArgs e) => PluginLog.Error($"### Error: {e.Message}\n{e.Exception}");
 
         private void OnMessageHdl(Object sender, MessageEventArgs e)
         {
@@ -88,7 +88,7 @@ namespace Loupedeck.HomeAssistant
                 }
                 //else
                 //{
-                //    PluginLog.Verbose($"Unhandled haEventType: {haEventType}");
+                //    PluginLog.Verbose($"Unhandled HaEventType: {haEventType}\n{data}");
                 //}
             }
             else if (type.Equals("result"))
@@ -117,8 +117,7 @@ namespace Loupedeck.HomeAssistant
                 }
                 //else
                 //{
-                //    PluginLog.Warning("Unknown ResultID: " + result_id);
-                //    PluginLog.Warning("Event Data:\n" + data);
+                //    PluginLog.Warning($"Unknown ResultID: {result_id}\n{data}");
                 //}
             }
             else if (type.Equals("auth_required"))
@@ -151,7 +150,7 @@ namespace Loupedeck.HomeAssistant
             }
             else
             {
-                PluginLog.Info("### data with unknown type:" + data);
+                PluginLog.Warning($"### Unknown Msg Type {type}\n{data}");
             }
         }
 
