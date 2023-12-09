@@ -20,6 +20,7 @@
             this.plugin.StatesReady += (sender, e) =>
             {
                 PluginLog.Verbose($"ClimateAdjustment.OnLoad() => StatesReady");
+
                 foreach (KeyValuePair<String, Json.HaState> group in this.plugin.States)
                 {
                     var state = group.Value;
@@ -29,6 +30,8 @@
                         this.AddParameter(state.Entity_Id, state.FriendlyName, "Climate");
                     }
                 }
+
+                PluginLog.Info($"{this.GetParameters().Length} climates found.");
             };
 
             this.plugin.StateChanged += (sender, e) => this.ActionImageChanged(e.Entity_Id);

@@ -20,6 +20,7 @@
             this.plugin.StatesReady += (sender, e) =>
             {
                 PluginLog.Verbose($"DimmerAdjustment.OnLoad() => StatesReady");
+
                 foreach (KeyValuePair<String, Json.HaState> group in this.plugin.States)
                 {
                     var state = group.Value;
@@ -29,6 +30,8 @@
                         this.AddParameter(state.Entity_Id, state.FriendlyName, "Dimmer");
                     }
                 }
+                
+                PluginLog.Info($"{this.GetParameters().Length} dimmers found.");
             };
 
             this.plugin.StateChanged += (sender, e) => this.ActionImageChanged(e.Entity_Id);
@@ -42,7 +45,7 @@
             { return null; }
 
             var entityState = this.plugin.States[actionParameter];
-            return $"{entityState.State} {entityState.FriendlyName}";
+            return $"{entityState.FriendlyName}";
         }
 
         protected override String GetAdjustmentDisplayName(String actionParameter, PluginImageSize imageSize)
