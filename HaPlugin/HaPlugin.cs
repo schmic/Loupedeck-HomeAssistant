@@ -49,6 +49,8 @@ namespace Loupedeck.HomeAssistant
             subscribe_events = 1002,
         }
 
+        private Int32 Event_Id = 2000;
+
         public Dictionary<String, HaState> States = new Dictionary<String, HaState>();
         public event EventHandler<EventArgs> StatesReady;
         public event EventHandler<StateChangedEventArgs> StateChanged;
@@ -71,16 +73,16 @@ namespace Loupedeck.HomeAssistant
 
         private void OnMessageHdl(Object sender, MessageEventArgs e)
         {
-            var data = JObject.Parse(e.Data);
-            var type = (String)data["type"];
+            var respData = JObject.Parse(e.Data);
+            var respType = (String)respData["type"];
 
-            if (type.Equals("event"))
+            if (respType.Equals("event"))
             {
-                var haEventType = (String)data["event"]["event_type"];
+                var evtType = (String)respData["event"]["event_type"];
 
-                if (haEventType.Equals("state_changed"))
+                if (evtType.Equals("state_changed"))
                 {
-                    var haEvent = data["event"]["data"].ToObject<HaEvent>();
+                    var haEvent = respData["event"]["data"].ToObject<HaEvent>();
                     var haState = haEvent.State;
                     //PluginLog.Verbose($"state_changed [{haState.Entity_Id}: {haState.State}]");
                     this.States[haState.Entity_Id] = haState;
@@ -91,17 +93,17 @@ namespace Loupedeck.HomeAssistant
                 //    PluginLog.Verbose($"Unhandled HaEventType: {haEventType}\n{data}");
                 //}
             }
-            else if (type.Equals("result"))
+            else if (respType.Equals("result"))
             {
-                var result_id = Int32.Parse(data["id"].ToString());
+                var result_id = Int32.Parse(respData["id"].ToString());
                 var result_event = (Events)result_id;
-                var result_status = (Boolean)data["success"];
+                var result_status = (Boolean)respData["success"];
 
                 if (result_event.Equals(Events.get_states))
                 {
                     PluginLog.Info("States Update Success: " + result_status);
 
-                    foreach (JToken t in data["result"].Children())
+                    foreach (JToken t in respData["result"].Children())
                     {
                         var haState = t.ToObject<HaState>();
                         //PluginLog.Verbose("state.ToString(): " + haState.ToString());
@@ -120,7 +122,7 @@ namespace Loupedeck.HomeAssistant
                 //    PluginLog.Warning($"Unknown ResultID: {result_id}\n{data}");
                 //}
             }
-            else if (type.Equals("auth_required"))
+            else if (respType.Equals("auth_required"))
             {
                 var auth = new JObject
                 {
@@ -130,9 +132,9 @@ namespace Loupedeck.HomeAssistant
                 PluginLog.Info("Sending auth token ..");
                 this.WebSocket.Send(auth.ToString());
             }
-            else if (type.Equals("auth_ok"))
+            else if (respType.Equals("auth_ok"))
             {
-                PluginLog.Info("Socket Auth: OK (HA Version: " + data["ha_version"] + ")");
+                PluginLog.Info("Socket Auth: OK (HA Version: " + respData["ha_version"] + ")");
 
                 var get_states = new JObject
                 {
@@ -150,30 +152,28 @@ namespace Loupedeck.HomeAssistant
             }
             else
             {
-                PluginLog.Warning($"### Unknown Msg Type {type}\n{data}");
+                PluginLog.Warning($"### HA unknown response type {respType}\n{respData}");
             }
         }
 
-        private Int32 id = 2000;
-
         public void LightToggle(String entity_id)
         {
-            var serivce_req = new JObject {
-                { "id", ++this.id },
+            var reqData = new JObject {
+                { "id", ++this.Event_Id },
                 { "type", "call_service" },
                 { "domain", "light" },
                 { "service", "toggle" },
                 { "target", new JObject { { "entity_id", entity_id } } }
             };
 
-            PluginLog.Verbose($"LightToggle: [entity_id: {entity_id}] [id: {this.id}]");
+            PluginLog.Verbose($"LightToggle: [entity_id: {entity_id}] [id: {this.Event_Id}]");
 
-            this.WebSocket.Send(serivce_req.ToString());
+            this.WebSocket.Send(reqData.ToString());
         }
         public void LightBrightness(String entity_id, Int32 brightness)
         {
-            var serivce_req = new JObject {
-                { "id", ++this.id },
+            var reqData = new JObject {
+                { "id", ++this.Event_Id },
                 { "type", "call_service" },
                 { "domain", "light" },
                 { "service", "turn_on" },
@@ -181,29 +181,29 @@ namespace Loupedeck.HomeAssistant
                 { "target", new JObject { { "entity_id", entity_id } } }
             };
 
-            PluginLog.Verbose($"LightBrightness: [entity_id: {entity_id}] [id: {this.id}] [brightness: {brightness}]");
+            PluginLog.Verbose($"LightBrightness: [entity_id: {entity_id}] [id: {this.Event_Id}] [brightness: {brightness}]");
 
-            this.WebSocket.Send(serivce_req.ToString());
+            this.WebSocket.Send(reqData.ToString());
         }
 
         public void SwitchToggle(String entity_id)
         {
-            var serivce_req = new JObject {
-                { "id", ++this.id },
+            var reqData = new JObject {
+                { "id", ++this.Event_Id },
                 { "type", "call_service" },
                 { "domain", "switch" },
                 { "service", "toggle" },
                 { "target", new JObject { { "entity_id", entity_id } } }
             };
 
-            PluginLog.Verbose($"SwitchToggle: [entity_id: {entity_id}] [id: {this.id}]");
+            PluginLog.Verbose($"SwitchToggle: [entity_id: {entity_id}] [id: {this.Event_Id}]");
 
-            this.WebSocket.Send(serivce_req.ToString());
+            this.WebSocket.Send(reqData.ToString());
         }
         public void ClimateTemperature(String entity_id, Int32 temperature)
         {
-            var serivce_req = new JObject {
-                { "id", ++this.id },
+            var reqData = new JObject {
+                { "id", ++this.Event_Id },
                 { "type", "call_service" },
                 { "domain", "climate" },
                 { "service", "set_temperature" },
@@ -211,9 +211,9 @@ namespace Loupedeck.HomeAssistant
                 { "target", new JObject { { "entity_id", entity_id } } }
             };
 
-            PluginLog.Verbose($"ClimateTemperature: [entity_id: {entity_id}] [id: {this.id}] [temperature: {temperature}]");
+            PluginLog.Verbose($"ClimateTemperature: [entity_id: {entity_id}] [id: {this.Event_Id}] [temperature: {temperature}]");
 
-            this.WebSocket.Send(serivce_req.ToString());
+            this.WebSocket.Send(reqData.ToString());
         }
     }
 }
