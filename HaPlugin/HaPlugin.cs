@@ -33,7 +33,7 @@ namespace Loupedeck.HomeAssistant
 
             if (Config == null)
             {
-                this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Configuration could not be read.", "https://github.com/schmic/Loupedeck-HomeAssistant/wiki", "Help");
+                this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Configuration could not be read.", "https://github.com/schmic/Loupedeck-HomeAssistant", "Help");
                 return;
             }
 
