@@ -46,7 +46,7 @@
                 { continue; }
 
                 var state = kvp.Value;
-                this.AddParameter(state.Entity_Id, state.FriendlyName, "Status");
+                this.AddParameter(state.Entity_Id, state.FriendlyName, "Sensor");
             }
 
             PluginLog.Info($"Sensor => {this.GetParameters().Length} found.");
