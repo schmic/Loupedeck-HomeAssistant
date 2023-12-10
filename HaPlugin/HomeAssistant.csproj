@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Actions\ClimateAdjustment.cs" />
     <Compile Include="Actions\DimmerAdjustment.cs" />
+    <Compile Include="Actions\SensorCommand.cs" />
     <Compile Include="Actions\DualStateCommand.cs" />
     <Compile Include="Actions\SwitchCommand.cs" />
     <Compile Include="Actions\LightCommand.cs" />
