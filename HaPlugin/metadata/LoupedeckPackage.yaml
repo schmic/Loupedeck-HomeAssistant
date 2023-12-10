@@ -15,10 +15,10 @@ displayName: HomeAssistant
 pluginFileName: HomeAssistantPlugin.dll
 
 # Plugin version.
-version: 0.3
+version: 0.4
 
 # Author of the plugin. The author can be a company or an individual developer.
-author: Michael 'schmic' Scherer
+author: schmic
 
 # Copyright information.
 copyright: Copyright © 2023 . All rights reserved.
