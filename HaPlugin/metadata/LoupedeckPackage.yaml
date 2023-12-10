@@ -6,16 +6,16 @@
 type: plugin4
 
 # Name of the plugin.
-name: HomeAssistant
+name: Ha
 
 # Name that is displayed in the Loupedeck configuration application.
 displayName: HomeAssistant
 
 # Name of the plugin library file.
-pluginFileName: HomeAssistant.dll
+pluginFileName: HomeAssistantPlugin.dll
 
 # Plugin version.
-version: 0.2
+version: 0.3
 
 # Author of the plugin. The author can be a company or an individual developer.
 author: Michael 'schmic' Scherer

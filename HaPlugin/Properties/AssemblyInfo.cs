@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HomeAssistant for Loupedeck")]
 [assembly: AssemblyDescription("Control your entities from your Loupedeck")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Loupedeck-HomeAssistant developers")]
-[assembly: AssemblyProduct("HomeAssistant")]
-[assembly: AssemblyCopyright("Copyright 2023. All rights reserved.")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
