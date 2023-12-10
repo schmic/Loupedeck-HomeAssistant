@@ -32,6 +32,10 @@
             return true;
         }
 
+        //protected override Boolean ProcessButtonEvent2(String actionParameter, DeviceButtonEvent2 buttonEvent) => false;
+
+        //protected override Boolean ProcessTouchEvent(String actionParameter, DeviceTouchEvent touchEvent) => false;
+
         private void StatesReady(Object sender, EventArgs e)
         {
             PluginLog.Verbose($"SensorCommand.OnLoad() => StatesReady");
@@ -40,9 +44,6 @@
             {
                 if (!kvp.Key.StartsWith($"sensor.") && !kvp.Key.StartsWith($"binary_sensor."))
                 { continue; }
-
-                PluginLog.Verbose($"{kvp.Key} is a sensor with {kvp.Value}");
-
 
                 var state = kvp.Value;
                 this.AddParameter(state.Entity_Id, state.FriendlyName, "Status");
