@@ -5,11 +5,8 @@
 
     using Loupedeck.HomeAssistant.Events;
 
-    abstract public class DualStateCommand : PluginMultistateDynamicCommand
+    public abstract class DualStateCommand : PluginMultistateDynamicCommand
     {
-        protected BitmapColor BgColor_off = new BitmapColor(22, 33, 38);
-        protected BitmapColor BgColor_on = new BitmapColor(73, 27, 74);
-
         protected HaPlugin plugin;
         protected readonly String type;
 
@@ -78,10 +75,7 @@
                 EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.type.ToLower()}_on.png") :
                 EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.type.ToLower()}_off.png");
 
-            var bg_color = isOn ? this.BgColor_on : this.BgColor_off;
-
             var bitmapBuilder = new BitmapBuilder(imageSize);
-            bitmapBuilder.FillRectangle(0, 0, bitmapBuilder.Width, bitmapBuilder.Height, bg_color);
             bitmapBuilder.DrawImage(entity_img, bitmapBuilder.Width / 2 - entity_img.Width / 2, 4);
             bitmapBuilder.DrawText(entity_friendly_name, 0, bitmapBuilder.Height / 4, bitmapBuilder.Width, bitmapBuilder.Height);
             return bitmapBuilder.ToImage();
