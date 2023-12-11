@@ -21,6 +21,8 @@
 
         public String Token;
 
+        public static HaConfig FromString(String jsonConfig) => JsonHelpers.DeserializeAnyObject<HaConfig>(jsonConfig);
+
         public static HaConfig Read()
         {
             var DEFAULT_PATH = Path.Combine(".loupedeck", "homeassistant");

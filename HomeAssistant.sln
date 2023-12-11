@@ -4,6 +4,8 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeAssistant", "HaPlugin\HomeAssistant.csproj", "{3F9844CF-4465-40F4-AC89-F10673669D6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaPluginTest", "HaPluginTest\HaPluginTest.csproj", "{D647AD14-4C50-4F32-A34C-86CA8A6D0A8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,10 @@ Global
 		{3F9844CF-4465-40F4-AC89-F10673669D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F9844CF-4465-40F4-AC89-F10673669D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F9844CF-4465-40F4-AC89-F10673669D6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D647AD14-4C50-4F32-A34C-86CA8A6D0A8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D647AD14-4C50-4F32-A34C-86CA8A6D0A8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D647AD14-4C50-4F32-A34C-86CA8A6D0A8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D647AD14-4C50-4F32-A34C-86CA8A6D0A8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
