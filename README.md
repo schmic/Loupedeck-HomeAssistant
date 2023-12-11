@@ -28,6 +28,7 @@ This plugin is not yet published to the official Loupedeck Store.
 - Copy & Paste the example into the file
 - Replace token and URL
   - for the URL you can simply use the URL from your browser, the plugin will do the rest
+  - using the `Nabu Casa-URL` is possible but not recommended, especially in a LAN setup
   - you must not add a path to the URL, it will be ignored and replaced with `/api/websocket`
 
 Example:
