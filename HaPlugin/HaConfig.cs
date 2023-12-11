@@ -5,17 +5,17 @@
 
     public class HaConfig
     {
-        public String Url { private get; set; }
+        public String Url { get; set; }
 
-        public Uri Uri
+        public String ApiUrl
         {
             get
             {
                 var builder = new UriBuilder(this.Url.Replace("http", "ws"))
-                { 
+                {
                     Path = "/api/websocket",
                 };
-                return builder.Uri;
+                return builder.Uri.ToString();
             }
         }
 

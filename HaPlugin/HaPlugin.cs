@@ -2,6 +2,7 @@ namespace Loupedeck.HomeAssistant
 {
     using System;
     using System.Collections.Generic;
+    using System.Security.Authentication;
 
     using Loupedeck.HomeAssistant.Events;
     using Loupedeck.HomeAssistant.Json;
@@ -36,9 +37,19 @@ namespace Loupedeck.HomeAssistant
                 this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Configuration could not be read.", "https://github.com/schmic/Loupedeck-HomeAssistant", "Help");
                 return;
             }
+            else if (Config.Token.IsNullOrEmpty())
+            {
+                this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Configuration is missing token.", "https://github.com/schmic/Loupedeck-HomeAssistant", "Help");
+                return;
+            }
+            else if (Config.Url.IsNullOrEmpty())
+            {
+                this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Configuration is missing url.", "https://github.com/schmic/Loupedeck-HomeAssistant", "Help");
+                return;
+            }
 
             this.Token = Config.Token;
-            this.SetupWebsocket(Config.Uri.ToString());
+            this.SetupWebsocket(Config.ApiUrl);
         }
 
         public override void Unload() => this.WebSocket.Close();
@@ -57,16 +68,27 @@ namespace Loupedeck.HomeAssistant
 
         private void SetupWebsocket(String url)
         {
-            PluginLog.Verbose($"SetupWebsocket(): [url: {url}]");
+            PluginLog.Verbose($"SetupWebsocket(): [url: {url}] [token: {this.Token.Substring(0, 16)}...]");
             this.WebSocket = new WebSocket(url);
-            this.WebSocket.Log.Level = LogLevel.Info;
-            this.WebSocket.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
-            this.WebSocket.SslConfiguration.ServerCertificateValidationCallback = null;
+            this.WebSocket.Log.Level = LogLevel.Trace;
+
+            if (url.StartsWith("wss://"))
+            {
+                this.WebSocket.SslConfiguration.EnabledSslProtocols = SslProtocols.None;
+                this.WebSocket.SslConfiguration.ServerCertificateValidationCallback = null;
+            }
 
             this.WebSocket.OnError += this.OnErrorHdl;
             this.WebSocket.OnMessage += this.OnMessageHdl;
 
-            this.WebSocket.Connect();
+            try
+            {
+                this.WebSocket.Connect();
+            }
+            catch (Exception ex)
+            {
+                PluginLog.Error($"### Error: {ex.Message}\n{ex.InnerException}");
+            }
         }
 
         private void OnErrorHdl(Object sender, ErrorEventArgs e) => PluginLog.Error($"### Error: {e.Message}\n{e.Exception}");
