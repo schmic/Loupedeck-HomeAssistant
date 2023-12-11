@@ -12,10 +12,12 @@
 
         public JObject Attributes { get; set; }
 
-        public String FriendlyName => this.Attributes["friendly_name"]?.ToString();
+        public String FriendlyName => this.Attributes.ContainsKey("friendly_name") ? this.Attributes.Value<String>("friendly_name") : "";
 
-        public String Icon => this.Attributes["icon"]?.ToString();
+        public String Icon => this.Attributes.ContainsKey("icon") ? this.Attributes.Value<String>("icon") : "";
 
         public override String ToString() => this.Entity_Id + " // " + this.State + " // " + this.Attributes;
+
+        public static HaState FromString(String jsonState) => JsonHelpers.DeserializeAnyObject<HaState>(jsonState);
     }
 }

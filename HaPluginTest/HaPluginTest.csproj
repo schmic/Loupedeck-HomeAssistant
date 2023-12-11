@@ -52,6 +52,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HaStateTest.cs" />
     <Compile Include="HaConfigTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -59,9 +60,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HaPlugin\HomeAssistant.csproj">
+    <ProjectReference Include="..\HaPlugin\HaPlugin.csproj">
       <Project>{3F9844CF-4465-40F4-AC89-F10673669D6E}</Project>
-      <Name>HomeAssistant</Name>
+      <Name>HaPlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

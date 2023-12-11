@@ -1,17 +1,14 @@
-﻿namespace Loupedeck.HomeAssistant
+﻿namespace Loupedeck.HomeAssistant.Adjustments
 {
     using System;
     using System.Collections.Generic;
 
-    using Newtonsoft.Json;
-
-    public class ClimateAdjustment : PluginDynamicAdjustment
+    public class DimmerAdjustment : PluginDynamicAdjustment
     {
         private HaPlugin plugin;
 
-        public ClimateAdjustment() : base(true)
-        {
-        }
+        public DimmerAdjustment() : base(true)
+        { }
 
         protected override Boolean OnLoad()
         {
@@ -19,19 +16,19 @@
 
             this.plugin.StatesReady += (sender, e) =>
             {
-                PluginLog.Verbose($"ClimateAdjustment.OnLoad() => StatesReady");
+                PluginLog.Verbose($"DimmerAdjustment.OnLoad() => StatesReady");
 
                 foreach (KeyValuePair<String, Json.HaState> group in this.plugin.States)
                 {
                     var state = group.Value;
-                    if (state.Entity_Id.StartsWith("climate."))
+                    if (state.Entity_Id.StartsWith("light."))
                     {
-                        //PluginLog.Verbose($"climate: {state}");
-                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Climate");
+                        // TODO: filter supported_color_modes["brightness"]
+                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Dimmer");
                     }
                 }
 
-                PluginLog.Info($"{this.GetParameters().Length} climates found.");
+                PluginLog.Info($"{this.GetParameters().Length} dimmers found.");
             };
 
             this.plugin.StateChanged += (sender, e) => this.ActionImageChanged(e.Entity_Id);
@@ -45,7 +42,7 @@
             { return null; }
 
             var entityState = this.plugin.States[actionParameter];
-            return $"{entityState.State} {entityState.FriendlyName}";
+            return $"{entityState.FriendlyName}";
         }
 
         protected override String GetAdjustmentDisplayName(String actionParameter, PluginImageSize imageSize)
@@ -63,7 +60,7 @@
             { return null; }
 
             var entityState = this.plugin.States[actionParameter];
-            Int32.TryParse(entityState.Attributes["temperature"]?.ToString(), out var entityValue);
+            Int32.TryParse(entityState?.Attributes["brightness"]?.ToString(), out var entityValue);
 
             return entityValue.ToString();
         }
@@ -74,16 +71,16 @@
             { return; }
 
             var entityState = this.plugin.States[entity_id];
-            PluginLog.Verbose(entityState.ToString());
-            Int32.TryParse(entityState.Attributes["temperature"]?.ToString(), out var entityValue);
+            Int32.TryParse(entityState.Attributes["brightness"]?.ToString(), out var entityValue);
             var newEntityValue = entityValue + value;
 
             PluginLog.Verbose($"{entity_id} {entityValue} => {newEntityValue}");
-            this.plugin.States[entity_id].Attributes["temperature"] = newEntityValue.ToString();
 
-            this.plugin.ClimateTemperature(entity_id, newEntityValue);
+            this.plugin.States[entity_id].Attributes["brightness"] = newEntityValue.ToString();
+
+            this.plugin.LightBrightness(entity_id, newEntityValue);
         }
 
-        protected override void RunCommand(String entity_id) => this.plugin.ClimateTemperature(entity_id, 18);
+        protected override void RunCommand(String actionParameter) => this.plugin.LightToggle(actionParameter);
     }
 }

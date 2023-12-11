@@ -81,12 +81,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\ClimateAdjustment.cs" />
-    <Compile Include="Actions\DimmerAdjustment.cs" />
-    <Compile Include="Actions\SensorCommand.cs" />
-    <Compile Include="Actions\DualStateCommand.cs" />
-    <Compile Include="Actions\SwitchCommand.cs" />
-    <Compile Include="Actions\LightCommand.cs" />
+    <Compile Include="Adjustments\ClimateAdjustment.cs" />
+    <Compile Include="Adjustments\DimmerAdjustment.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\SensorCommand.cs" />
+    <Compile Include="Commands\DualStateCommand.cs" />
+    <Compile Include="Commands\SwitchCommand.cs" />
+    <Compile Include="Commands\LightCommand.cs" />
     <Compile Include="Events\StateChangedEventArgs.cs" />
     <Compile Include="HaConfig.cs" />
     <Compile Include="Json\HaState.cs" />
