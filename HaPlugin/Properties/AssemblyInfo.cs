@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HomeAssistant for Loupedeck")]
-[assembly: AssemblyDescription("Control your entities from your Loupedeck")]
+[assembly: AssemblyTitle("Home Assistant for Loupedeck")]
+[assembly: AssemblyDescription("Control your entities from your Loupedeck. Communication via Websocket API to receive state changes immediately.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]

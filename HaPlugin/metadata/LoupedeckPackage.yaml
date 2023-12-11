@@ -9,7 +9,7 @@ type: plugin4
 name: Ha
 
 # Name that is displayed in the Loupedeck configuration application.
-displayName: HomeAssistant
+displayName: Home Assistant Websocket
 
 # Name of the plugin library file.
 pluginFileName: HomeAssistantPlugin.dll
