@@ -27,6 +27,8 @@ This plugin is not yet published to the official Loupedeck Store.
   `C:/Users/<USERNAME>/.loupedeck/homeassistant/homeassistant.json`
 - Copy & Paste the example into the file
 - Replace token and URL
+  - for the URL you can simply use the URL from your browser, the plugin will do the rest
+  - you must not add a path to the URL, it will be ignored and replaced with `/api/websocket`
 
 Example:
 ```
