@@ -4,6 +4,7 @@ This plugin enables you to control various [Home-Assitant](https://home-assistan
 
 Supported entities:
 - Automations
+  - toggle on & off 
   - trigger
 - Buttons
   - press
