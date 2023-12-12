@@ -2,13 +2,20 @@
 {
     using System;
     using System.Collections.Generic;
+
+    using Loupedeck.HomeAssistant.Json;
+
     using Newtonsoft.Json.Linq;
 
     public class DimmerAdjustment : PluginDynamicAdjustment
     {
         private HaPlugin plugin;
 
-        public DimmerAdjustment() : base(true) => this.GroupName = "Dimmer";
+        public DimmerAdjustment() : base(true)
+        {
+            this.GroupName = "Dimmer";
+            this.ResetDisplayName = "Toggle";
+        }
 
         protected override Boolean OnLoad()
         {
@@ -21,9 +28,8 @@
                 foreach (KeyValuePair<String, Json.HaState> group in this.plugin.States)
                 {
                     var state = group.Value;
-                    if (state.Entity_Id.StartsWith("light."))
+                    if (this.IsDimmer(state))
                     {
-                        // TODO: filter supported_color_modes["brightness"]
                         this.AddParameter(state.Entity_Id, state.FriendlyName, "Dimmer");
                     }
                 }
@@ -35,6 +41,8 @@
 
             return true;
         }
+
+        private Boolean IsDimmer(HaState state) => state.Entity_Id.StartsWith("light.") && state.Attributes.ContainsKey("brightness");
 
         protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize)
         {

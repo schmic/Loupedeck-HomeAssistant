@@ -67,9 +67,6 @@ To get a token you have to log into your Home-Assistant, then go to your Profile
 Someone explained it [here](https://community.home-assistant.io/t/how-to-get-long-lived-access-token/162159/5) as well.
 
 ## Bugs & Issues
-- Dimmers
-  - currently every light is also registered as a dimmer
-  - you must only configure entities as Dimmer if they have a `brightness` attribute
 - Climate Control, current state is WIP
   - visually different to others, no icons, no colors
   - only shows the current state reported from HA
@@ -93,4 +90,5 @@ All icons used from the [Material Design Icons](https://pictogrammers.com/docs/g
 - are they actually of any use?
 
 ## Lights
-- filter dimmers by `brightness` attribute
+- add support for different modes
+  - rgbw/led 
