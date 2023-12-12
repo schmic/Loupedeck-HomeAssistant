@@ -39,10 +39,6 @@
 
         protected Dictionary<String, Json.HaState> GetStates() => this.GetPlugin().States;
  
-        //protected override Boolean ProcessButtonEvent2(String actionParameter, DeviceButtonEvent2 buttonEvent) => false;
-
-        //protected override Boolean ProcessTouchEvent(String actionParameter, DeviceTouchEvent touchEvent) => false;
-
         private void StatesReady(Object sender, EventArgs e)
         {
             PluginLog.Verbose($"{this.GroupName}Command.OnLoad() => StatesReady");
