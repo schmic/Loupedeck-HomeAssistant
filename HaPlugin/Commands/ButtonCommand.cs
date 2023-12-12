@@ -1,22 +1,20 @@
 ﻿namespace Loupedeck.HomeAssistant.Commands
 {
     using System;
-
     using Newtonsoft.Json.Linq;
 
-    public class LightCommand : DualStateCommand
+    public class ButtonCommand : BaseCommand
     {
-        public LightCommand() : base("Light")
-        { }
+        public ButtonCommand() : base("Button") { }
 
         protected override Boolean EntitiyFilter(String entity_id)
-            => entity_id.StartsWith("light.");
+            => entity_id.StartsWith("button.");
 
         protected override void RunCommand(String entity_id)
         {
             var data = new JObject {
-                { "domain", "light" },
-                { "service", "toggle" },
+                { "domain", "button" },
+                { "service", "press" },
                 { "target", new JObject { { "entity_id", entity_id } } }
             };
 

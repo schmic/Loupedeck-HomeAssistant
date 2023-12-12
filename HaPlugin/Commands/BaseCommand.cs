@@ -11,6 +11,8 @@
 
         protected abstract Boolean EntitiyFilter(String entity_id);
 
+        protected abstract override void RunCommand(String entity_id);
+
         protected override Boolean OnLoad()
         {
             using (var plugin = base.Plugin as HaPlugin)
@@ -33,12 +35,10 @@
             return true;
         }
 
-        private Dictionary<String, Json.HaState> GetStates()
-        {
-            var plugin = base.Plugin as HaPlugin;
-            return plugin.States;
-        }
+        protected HaPlugin GetPlugin() => (HaPlugin)base.Plugin;
 
+        protected Dictionary<String, Json.HaState> GetStates() => this.GetPlugin().States;
+ 
         //protected override Boolean ProcessButtonEvent2(String actionParameter, DeviceButtonEvent2 buttonEvent) => false;
 
         //protected override Boolean ProcessTouchEvent(String actionParameter, DeviceTouchEvent touchEvent) => false;

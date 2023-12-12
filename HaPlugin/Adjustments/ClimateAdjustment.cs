@@ -2,13 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using Newtonsoft.Json.Linq;
 
     public class ClimateAdjustment : PluginDynamicAdjustment
     {
         private HaPlugin plugin;
 
-        public ClimateAdjustment() : base(true)
-        { }
+        public ClimateAdjustment() : base(true) => this.GroupName = "Climate";
 
         protected override Boolean OnLoad()
         {
@@ -16,18 +16,18 @@
 
             this.plugin.StatesReady += (sender, e) =>
             {
-                PluginLog.Verbose($"ClimateAdjustment.OnLoad() => StatesReady");
+                PluginLog.Verbose($"{this.GroupName}Command.OnLoad() => StatesReady");
 
                 foreach (KeyValuePair<String, Json.HaState> group in this.plugin.States)
                 {
                     var state = group.Value;
                     if (state.Entity_Id.StartsWith("climate."))
                     {
-                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Climate");
+                        this.AddParameter(state.Entity_Id, state.FriendlyName, this.GroupName);
                     }
                 }
 
-                PluginLog.Info($"{this.GetParameters().Length} climates found.");
+                PluginLog.Info($"[group: {this.GroupName}] [count: {this.GetParameters().Length}]");
             };
 
             this.plugin.StateChanged += (sender, e) => this.ActionImageChanged(e.Entity_Id);
@@ -72,14 +72,26 @@
             var entityState = this.plugin.States[entity_id];
             PluginLog.Verbose(entityState.ToString());
             Int32.TryParse(entityState.Attributes["temperature"]?.ToString(), out var entityValue);
-            var newEntityValue = entityValue + value;
+            var temperature = entityValue + value;
 
-            PluginLog.Verbose($"{entity_id} {entityValue} => {newEntityValue}");
-            this.plugin.States[entity_id].Attributes["temperature"] = newEntityValue.ToString();
+            PluginLog.Verbose($"{entity_id} {entityValue} => {temperature}");
+            this.plugin.States[entity_id].Attributes["temperature"] = temperature.ToString();
 
-            this.plugin.ClimateTemperature(entity_id, newEntityValue);
+            this.SetTemperature(entity_id, temperature);
         }
 
-        protected override void RunCommand(String entity_id) => this.plugin.ClimateTemperature(entity_id, 18);
+        protected override void RunCommand(String entity_id) => this.SetTemperature(entity_id, 18);
+
+        private void SetTemperature(String entity_id, Int32 temperature)
+        {
+            var reqData = new JObject {
+                { "domain", "climate" },
+                { "service", "set_temperature" },
+                { "service_data", new JObject { { "temperature", temperature} } },
+                { "target", new JObject { { "entity_id", entity_id } } }
+            };
+
+            this.plugin.CallService(reqData);
+        }
     }
 }

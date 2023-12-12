@@ -2,13 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+
     using Newtonsoft.Json.Linq;
 
-    public class DimmerAdjustment : PluginDynamicAdjustment
+    public class CoverAdjustment : PluginDynamicAdjustment
     {
         private HaPlugin plugin;
 
-        public DimmerAdjustment() : base(true) => this.GroupName = "Dimmer";
+        public CoverAdjustment() : base(true)
+        {
+            this.GroupName = "Cover";
+            this.ResetDisplayName = "Toggle"; // FIXME: does not apply
+        }
 
         protected override Boolean OnLoad()
         {
@@ -21,10 +26,9 @@
                 foreach (KeyValuePair<String, Json.HaState> group in this.plugin.States)
                 {
                     var state = group.Value;
-                    if (state.Entity_Id.StartsWith("light."))
+                    if (state.Entity_Id.StartsWith("cover."))
                     {
-                        // TODO: filter supported_color_modes["brightness"]
-                        this.AddParameter(state.Entity_Id, state.FriendlyName, "Dimmer");
+                        this.AddParameter(state.Entity_Id, state.FriendlyName, this.GroupName);
                     }
                 }
 
@@ -42,7 +46,7 @@
             { return null; }
 
             var entityState = this.plugin.States[actionParameter];
-            return $"{entityState.FriendlyName}";
+            return $"{entityState.State} {entityState.FriendlyName}";
         }
 
         protected override String GetAdjustmentDisplayName(String actionParameter, PluginImageSize imageSize)
@@ -60,7 +64,7 @@
             { return null; }
 
             var entityState = this.plugin.States[actionParameter];
-            Int32.TryParse(entityState?.Attributes["brightness"]?.ToString(), out var entityValue);
+            Int32.TryParse(entityState.Attributes["current_position"]?.ToString(), out var entityValue);
 
             return entityValue.ToString();
         }
@@ -71,32 +75,32 @@
             { return; }
 
             var entityState = this.plugin.States[entity_id];
-            Int32.TryParse(entityState.Attributes["brightness"]?.ToString(), out var entityValue);
-            var brightness = entityValue + value;
+            PluginLog.Verbose(entityState.ToString());
+            Int32.TryParse(entityState.Attributes["current_position"]?.ToString(), out var entityValue);
+            var position = entityValue + value;
 
-            PluginLog.Verbose($"{entity_id} {entityValue} => {brightness}");
+            this.plugin.States[entity_id].Attributes["current_position"] = position.ToString();
 
-            this.plugin.States[entity_id].Attributes["brightness"] = brightness.ToString();
-
-            var data = new JObject {
-                { "domain", "light" },
-                { "service", "turn_on" },
-                { "service_data", new JObject { { "brightness", brightness } } },
+            var reqData = new JObject {
+                { "domain", "cover" },
+                { "service", "set_cover_position" },
+                { "service_data", new JObject { { "position", position} } },
                 { "target", new JObject { { "entity_id", entity_id } } }
             };
 
-            this.plugin.CallService(data);
+            this.plugin.CallService(reqData);
         }
 
         protected override void RunCommand(String entity_id)
         {
-            var data = new JObject {
-                { "domain", "light" },
+            var reqData = new JObject {
+                { "domain", "cover" },
                 { "service", "toggle" },
+                { "service_data", new JObject { } },
                 { "target", new JObject { { "entity_id", entity_id } } }
             };
 
-            this.plugin.CallService(data);
+            this.plugin.CallService(reqData);
         }
     }
 }

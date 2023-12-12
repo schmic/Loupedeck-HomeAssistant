@@ -178,64 +178,17 @@ namespace Loupedeck.HomeAssistant
             }
         }
 
-        public void LightToggle(String entity_id)
+        public void CallService(JObject data)
         {
-            var reqData = new JObject {
-                { "id", ++this.Event_Id },
-                { "type", "call_service" },
-                { "domain", "light" },
-                { "service", "toggle" },
-                { "target", new JObject { { "entity_id", entity_id } } }
-            };
-
-            PluginLog.Verbose($"LightToggle: [entity_id: {entity_id}] [id: {this.Event_Id}]");
-
-            this.WebSocket.Send(reqData.ToString());
-        }
-        public void LightBrightness(String entity_id, Int32 brightness)
-        {
-            var reqData = new JObject {
-                { "id", ++this.Event_Id },
-                { "type", "call_service" },
-                { "domain", "light" },
-                { "service", "turn_on" },
-                { "service_data", new JObject { { "brightness", brightness} } },
-                { "target", new JObject { { "entity_id", entity_id } } }
-            };
-
-            PluginLog.Verbose($"LightBrightness: [entity_id: {entity_id}] [id: {this.Event_Id}] [brightness: {brightness}]");
-
-            this.WebSocket.Send(reqData.ToString());
+            data.Add("type", "call_service");
+            PluginLog.Verbose($"CallService: [domain: {data["domain"]}] [service: {data["service"]}] [entity_id: {data["target"]["entity_id"]}] [service_data: {data["service_data"]}]");
+            this.Send(data);
         }
 
-        public void SwitchToggle(String entity_id)
+        private void Send(JObject data)
         {
-            var reqData = new JObject {
-                { "id", ++this.Event_Id },
-                { "type", "call_service" },
-                { "domain", "switch" },
-                { "service", "toggle" },
-                { "target", new JObject { { "entity_id", entity_id } } }
-            };
-
-            PluginLog.Verbose($"SwitchToggle: [entity_id: {entity_id}] [id: {this.Event_Id}]");
-
-            this.WebSocket.Send(reqData.ToString());
-        }
-        public void ClimateTemperature(String entity_id, Int32 temperature)
-        {
-            var reqData = new JObject {
-                { "id", ++this.Event_Id },
-                { "type", "call_service" },
-                { "domain", "climate" },
-                { "service", "set_temperature" },
-                { "service_data", new JObject { { "temperature", temperature} } },
-                { "target", new JObject { { "entity_id", entity_id } } }
-            };
-
-            PluginLog.Verbose($"ClimateTemperature: [entity_id: {entity_id}] [id: {this.Event_Id}] [temperature: {temperature}]");
-
-            this.WebSocket.Send(reqData.ToString());
+            data.Add("id", ++this.Event_Id);
+            this.WebSocket.Send(data.ToString());
         }
     }
 }

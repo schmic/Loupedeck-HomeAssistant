@@ -54,7 +54,7 @@
                 this.AddParameter(state.Entity_Id, state.FriendlyName, this.GroupName);
             }
 
-            PluginLog.Info($"{this.GroupName} => {this.GetParameters().Length} found.");
+            PluginLog.Info($"[group: {this.GroupName}] [count: {this.GetParameters().Length}]");
         }
 
         private void StateChanged(Object sender, StateChangedEventArgs e)

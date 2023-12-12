@@ -81,9 +81,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adjustments\CoverAdjustment.cs" />
     <Compile Include="Adjustments\ClimateAdjustment.cs" />
     <Compile Include="Adjustments\DimmerAdjustment.cs" />
+    <Compile Include="Commands\ButtonCommand.cs" />
+    <Compile Include="Commands\SceneCommand.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\AutomationCommand.cs" />
     <Compile Include="Commands\SensorCommand.cs" />
     <Compile Include="Commands\DualStateCommand.cs" />
     <Compile Include="Commands\SwitchCommand.cs" />
