@@ -81,11 +81,6 @@ All icons used from the [Material Design Icons](https://pictogrammers.com/docs/g
 - deal with long `friendly_name` entries better
 - override `Reset` for adjustments
 
-## Automations
-- change to DualStateCommand, can be on/off
-- hold button to enable/disable automation
-  - make automation state visual represented, not by text
-
 ## Buttons
 - are they actually of any use?
 
