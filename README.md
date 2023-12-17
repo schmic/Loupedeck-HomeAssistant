@@ -88,3 +88,6 @@ All icons used from the [Material Design Icons](https://pictogrammers.com/docs/g
 ## Lights
 - add support for different modes
   - rgbw/led 
+
+# Commandline Paramters
+- -enablelogs
