@@ -18,12 +18,16 @@ Supported entities:
   - set `brightness` with knob
 - Lights
   - toggle on & off 
+- Locks
+  - toggle lock & unlock
 - Scene
   - turn on
 - Sensor
   - just visual representation of the state
 - Switches
   - toggle on & off
+Water Heater
+  - just visual representation of the state
 
 The plugin communicates via the [Websocket API](https://developers.home-assistant.io/docs/api/websocket/) of Home-Assistant.
 State changes are immediately reflect on your Loupedeck display.
