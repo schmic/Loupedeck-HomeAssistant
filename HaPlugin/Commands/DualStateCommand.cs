@@ -7,11 +7,23 @@
 
     public abstract class DualStateCommand : PluginMultistateDynamicCommand
     {
-        public DualStateCommand(String groupName) : base()
+        protected readonly String OffState;
+        protected readonly String OffLabel;
+
+        protected readonly String OnState;
+        protected readonly String OnLabel;
+
+        public DualStateCommand(String groupName, String offState = "off", String onState = "on") : base()
         {
             this.GroupName = groupName;
-            this.AddState("off", "Off", $"{this.GroupName} is off.");
-            this.AddState("on", "On", $"{this.GroupName} is on.");
+            this.OffState = offState;
+            this.OnState = onState;
+
+            this.OffLabel = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.OffState.ToLower());
+            this.OnLabel = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.OnState.ToLower());
+
+            this.AddState(this.OffState, this.OffLabel, $"{this.GroupName} is {this.OffState}.");
+            this.AddState(this.OnState, this.OnLabel, $"{this.GroupName} is {this.OnState}.");
         }
         protected abstract Boolean EntitiyFilter(String entity_id);
 
@@ -54,7 +66,7 @@
                 this.AddParameter(state.Entity_Id, state.FriendlyName, this.GroupName);
             }
 
-            PluginLog.Info($"[group: {this.GroupName}] [count: {this.GetParameters().Length}]");
+            PluginLog.Info($"[group: {this.GroupName}] [offLabel: {this.OffLabel}] [onLabel: {this.OnLabel}] [count: {this.GetParameters().Length}]");
         }
 
         private void StateChanged(Object sender, StateChangedEventArgs e)
@@ -65,7 +77,7 @@
             var states = this.GetStates();
 
             var entity_state = states[e.Entity_Id].State;
-            var state_idx = entity_state.Equals("on") ? 1 : 0;
+            var state_idx = entity_state.Equals(this.OnState) ? 1 : 0;
 
             this.SetCurrentState(e.Entity_Id, state_idx);
             this.ActionImageChanged(e.Entity_Id);
@@ -78,12 +90,12 @@
 
             var states = this.GetStates();
 
-            var isOn = states[entity_id].State.Equals("on");
+            var isOn = states[entity_id].State.Equals(this.OnState);
             var entity_friendly_name = states[entity_id].FriendlyName;
 
             var entity_img = isOn ?
-                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.GroupName.ToLower()}_on.png") :
-                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.GroupName.ToLower()}_off.png");
+                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.GroupName.ToLower()}_{this.OnState}.png") :
+                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.GroupName.ToLower()}_{this.OffState}.png");
 
             var bitmapBuilder = new BitmapBuilder(imageSize);
             bitmapBuilder.DrawImage(entity_img, bitmapBuilder.Width / 2 - entity_img.Width / 2, 4);
