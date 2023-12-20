@@ -41,40 +41,28 @@
             { return null; }
 
             var entityState = this.plugin.States[actionParameter];
-            return $"{entityState.State} {entityState.FriendlyName}";
-        }
-
-        protected override String GetAdjustmentDisplayName(String actionParameter, PluginImageSize imageSize)
-        {
-            if (actionParameter.IsNullOrEmpty())
-            { return null; }
-
-            var entityState = this.plugin.States[actionParameter];
-            return $"{entityState.FriendlyName}";
-        }
-
-        protected override String GetAdjustmentValue(String actionParameter)
-        {
-            if (actionParameter.IsNullOrEmpty())
-            { return null; }
-
-            var entityState = this.plugin.States[actionParameter];
             Int32.TryParse(entityState.Attributes["temperature"]?.ToString(), out var entityValue);
-
-            return entityValue.ToString();
+            return $"{entityState.FriendlyName}\n{entityState.State}/{entityValue}°";
         }
 
-        protected override void ApplyAdjustment(String entity_id, Int32 value)
+        //protected override String GetAdjustmentDisplayName(String actionParameter, PluginImageSize imageSize)
+        //{
+        //}
+
+        //protected override String GetAdjustmentValue(String actionParameter)
+        //{
+        //}
+
+        protected override void ApplyAdjustment(String entity_id, Int32 changeTemperature)
         {
             if (entity_id.IsNullOrEmpty())
             { return; }
 
             var entityState = this.plugin.States[entity_id];
-            PluginLog.Verbose(entityState.ToString());
-            Int32.TryParse(entityState.Attributes["temperature"]?.ToString(), out var entityValue);
-            var temperature = entityValue + value;
+            Int32.TryParse(entityState.Attributes["temperature"]?.ToString(), out var currentTemperature);
+            var temperature = currentTemperature + changeTemperature;
 
-            PluginLog.Verbose($"{entity_id} {entityValue} => {temperature}");
+            PluginLog.Verbose($"{entity_id} {currentTemperature} => {temperature}");
             this.plugin.States[entity_id].Attributes["temperature"] = temperature.ToString();
 
             this.SetTemperature(entity_id, temperature);
@@ -92,6 +80,7 @@
             };
 
             this.plugin.CallService(reqData);
+            this.AdjustmentValueChanged();
         }
     }
 }
