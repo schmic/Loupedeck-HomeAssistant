@@ -22,6 +22,8 @@ Supported entities:
   - toggle lock & unlock
 - Scene
   - turn on
+- Script
+  - execute, simple option via `Script` Folder or via manually configuration with data option
 - Sensor
   - just visual representation of the state
 - Switches
