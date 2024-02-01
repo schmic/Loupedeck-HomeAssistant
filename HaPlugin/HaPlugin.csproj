@@ -84,6 +84,8 @@
     <Compile Include="Adjustments\CoverAdjustment.cs" />
     <Compile Include="Adjustments\ClimateAdjustment.cs" />
     <Compile Include="Adjustments\DimmerAdjustment.cs" />
+    <Compile Include="Commands\ScriptCommand.cs" />
+    <Compile Include="Commands\ScriptAdvancedCommand.cs" />
     <Compile Include="Commands\ButtonCommand.cs" />
     <Compile Include="Commands\LockCommand.cs" />
     <Compile Include="Commands\SceneCommand.cs" />

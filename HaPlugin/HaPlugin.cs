@@ -180,8 +180,11 @@ namespace Loupedeck.HomeAssistant
 
         public void CallService(JObject data)
         {
-            data.Add("type", "call_service");
-            PluginLog.Verbose($"CallService: [domain: {data["domain"]}] [service: {data["service"]}] [entity_id: {data["target"]["entity_id"]}] [service_data: {data["service_data"]}]");
+            if (!data.ContainsKey("type"))
+            {
+                data.Add("type", "call_service");
+            }
+            PluginLog.Verbose(data.ToString());
             this.Send(data);
         }
 
