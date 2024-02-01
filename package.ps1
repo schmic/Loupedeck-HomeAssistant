@@ -1,1 +1,1 @@
-LoupedeckPluginTool.exe pack -input=".\HaPlugin\bin\" -output="..\HomeAssistant-0.7.lplug4"
+LoupedeckPluginTool.exe pack -input=".\HaPlugin\bin\" -output="..\HomeAssistant-0.8.lplug4"
