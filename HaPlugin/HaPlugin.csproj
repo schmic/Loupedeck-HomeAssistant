@@ -35,22 +35,20 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath Condition="$(OS) == 'Windows_NT'">$(LocalAppData)\Loupedeck\Plugins\Ha\win\</OutputPath>
+    <OutputPath Condition="$(OS) == 'Windows_NT'">..\..\..\..\AppData\Local\Loupedeck\Plugins\HA\win\</OutputPath>
     <OutputPath Condition="$(OS) != 'Windows_NT'">$(HOME)/.local/share/Loupedeck/Plugins/Ha/mac/</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <OutputPath>..\..\..\..\AppData\Local\Loupedeck\Plugins\HA\win\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath Condition="$(OS) == 'Windows_NT'">$(BaseOutputPath)$(Configuration)\win\</OutputPath>
+    <OutputPath Condition="$(OS) == 'Windows_NT'">bin\win\</OutputPath>
     <OutputPath Condition="$(OS) != 'Windows_NT'">$(BaseOutputPath)$(Configuration)/mac/</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <OutputPath>bin\win\</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -58,7 +56,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Loupedeck\Loupedeck2\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="$(OS) == 'Windows_NT'">..\..\..\..\..\..\Program Files (x86)\Loupedeck\Loupedeck2\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="$(OS) != 'Windows_NT'">/Applications/Loupedeck.app/Contents/MonoBundle/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PluginApi, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,7 +76,8 @@
     <Reference Include="System.Xml" />
     <Reference Include="websocket-sharp, Version=5.8.0.17786, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Loupedeck\Loupedeck2\websocket-sharp.dll</HintPath>
+      <HintPath Condition="$(OS) == 'Windows_NT'">..\..\..\..\..\..\Program Files (x86)\Loupedeck\Loupedeck2\websocket-sharp.dll</HintPath>
+      <HintPath Condition="$(OS) != 'Windows_NT'">/Applications/Loupedeck.app/Contents/MonoBundle/websocket-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

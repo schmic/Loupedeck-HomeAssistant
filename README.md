@@ -34,18 +34,23 @@ Water Heater
 The plugin communicates via the [Websocket API](https://developers.home-assistant.io/docs/api/websocket/) of Home-Assistant.
 State changes are immediately reflect on your Loupedeck display.
 
-## Installation
+## Installation (Windows)
 - download the latest .lplug4 asset [here](https://github.com/schmic/Loupedeck-HomeAssistant/releases/latest)
 - install into the Loupedeck software
   - right click and select `Install Plugin`
 
 This plugin is not yet published to the official Loupedeck Store.
-Only available for Windows, tested with Loupedeck Live.
+Only pre-built for Windows, tested with Loupedeck Live.
+
+## Installation (Mac)
+- download the repo and build (debug) in VS for Mac
+- restart Loupedeck software, the plugin will automatically be picked up
 
 ## Configuration
 
 - Create the following path & file in your home folder:
-  `C:/Users/<USERNAME>/.loupedeck/homeassistant/homeassistant.json`
+  - Windows: `C:/Users/<USERNAME>/.loupedeck/homeassistant/homeassistant.json`
+  - Mac: `/Users/<USERNAME>/.loupedeck/homeassistant/homeassistant.json`
 - Copy & Paste the example into the file
 - Replace token and URL
   - for the URL you can simply use the URL from your browser, the plugin will do the rest
