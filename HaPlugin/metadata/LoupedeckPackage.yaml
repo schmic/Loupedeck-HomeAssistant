@@ -12,16 +12,16 @@ name: Ha
 displayName: Home Assistant Websocket
 
 # Name of the plugin library file.
-pluginFileName: HomeAssistantPlugin.dll
+pluginFileName: HaPlugin.dll
 
 # Plugin version.
-version: 0.8
+version: 0.8.0
 
 # Author of the plugin. The author can be a company or an individual developer.
 author: schmic
 
 # Copyright information.
-copyright: Copyright © 2023 . All rights reserved.
+copyright: Copyright © 2024 . All rights reserved.
 
 
 # ==================================================================================================

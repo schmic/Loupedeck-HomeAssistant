@@ -1,4 +1,4 @@
-namespace Loupedeck.HomeAssistant
+namespace Loupedeck.HaPlugin.Helpers
 {
     using System;
     using System.IO;

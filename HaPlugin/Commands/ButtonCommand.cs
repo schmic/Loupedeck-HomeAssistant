@@ -1,4 +1,4 @@
-﻿namespace Loupedeck.HomeAssistant.Commands
+﻿namespace Loupedeck.HaPlugin.Commands
 {
     using System;
     using Newtonsoft.Json.Linq;

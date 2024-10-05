@@ -1,15 +1,16 @@
-namespace Loupedeck.HomeAssistant
+namespace Loupedeck.HaPlugin
 {
     using System;
     using System.Collections.Generic;
-    using System.Security.Authentication;
 
-    using Loupedeck.HomeAssistant.Events;
-    using Loupedeck.HomeAssistant.Json;
+    using Loupedeck.HaPlugin;
+    using Loupedeck.HaPlugin.Events;
+    using Loupedeck.HaPlugin.Json;
+    using Loupedeck.HaPlugin.Helpers;
 
     using Newtonsoft.Json.Linq;
 
-    using WebSocketSharp;
+    using Websocket.Client;
 
     public class HaPlugin : Plugin
     {
@@ -20,7 +21,7 @@ namespace Loupedeck.HomeAssistant
         public override Boolean HasNoApplication => true;
 
         private String Token;
-        private WebSocket WebSocket;
+        private WebsocketClient WebSocket;
 
         public HaPlugin()
         {
@@ -52,7 +53,7 @@ namespace Loupedeck.HomeAssistant
             this.SetupWebsocket(Config.ApiUrl);
         }
 
-        public override void Unload() => this.WebSocket.Close();
+        public override void Unload() => this.WebSocket.Dispose();
 
         private enum Events : Int32
         {
@@ -66,24 +67,24 @@ namespace Loupedeck.HomeAssistant
         public event EventHandler<EventArgs> StatesReady;
         public event EventHandler<StateChangedEventArgs> StateChanged;
 
-        private void SetupWebsocket(String url)
+        private void SetupWebsocket(Uri url)
         {
             PluginLog.Verbose($"SetupWebsocket(): [url: {url}] [token: {this.Token.Substring(0, 16)}...]");
-            this.WebSocket = new WebSocket(url);
-            this.WebSocket.Log.Level = LogLevel.Trace;
+            this.WebSocket = new WebsocketClient(url);
+            this.WebSocket.ReconnectTimeout = TimeSpan.FromSeconds(30);
+            
+            // if (url.AbsoluteUri.StartsWith("wss://"))
+            // {
+            //     this.WebSocket.SslConfiguration.EnabledSslProtocols = SslProtocols.None;
+            //     this.WebSocket.SslConfiguration.ServerCertificateValidationCallback = null;
+            // }
 
-            if (url.StartsWith("wss://"))
-            {
-                this.WebSocket.SslConfiguration.EnabledSslProtocols = SslProtocols.None;
-                this.WebSocket.SslConfiguration.ServerCertificateValidationCallback = null;
-            }
-
-            this.WebSocket.OnError += this.OnErrorHdl;
-            this.WebSocket.OnMessage += this.OnMessageHdl;
+            // this.WebSocket.OnError += this.OnErrorHdl;
+            this.WebSocket.MessageReceived.Subscribe(this.OnMessageHdl);
 
             try
             {
-                this.WebSocket.Connect();
+                this.WebSocket.Start();
             }
             catch (Exception ex)
             {
@@ -91,11 +92,11 @@ namespace Loupedeck.HomeAssistant
             }
         }
 
-        private void OnErrorHdl(Object sender, ErrorEventArgs e) => PluginLog.Error($"### Error: {e.Message}\n{e.Exception}");
+        // private void OnErrorHdl(Object sender, ErrorEventArgs e) => PluginLog.Error($"### Error: {e.Message}\n{e.Exception}");
 
-        private void OnMessageHdl(Object sender, MessageEventArgs e)
+        private void OnMessageHdl(ResponseMessage msg)
         {
-            var respData = JObject.Parse(e.Data);
+            var respData = JObject.Parse(msg.Text);
             var respType = (String)respData["type"];
 
             if (respType.Equals("event"))

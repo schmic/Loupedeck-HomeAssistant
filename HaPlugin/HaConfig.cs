@@ -1,13 +1,16 @@
-﻿namespace Loupedeck.HomeAssistant
+﻿namespace Loupedeck.HaPlugin
 {
     using System;
     using System.IO;
+
+    using Loupedeck.HaPlugin;
+    using Loupedeck.HaPlugin.Helpers;
 
     public class HaConfig
     {
         public String Url { get; set; }
 
-        public String ApiUrl
+        public Uri ApiUrl
         {
             get
             {
@@ -15,7 +18,7 @@
                 {
                     Path = "/api/websocket",
                 };
-                return builder.Uri.ToString();
+                return builder.Uri;
             }
         }
 

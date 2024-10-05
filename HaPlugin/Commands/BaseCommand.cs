@@ -1,9 +1,11 @@
-﻿namespace Loupedeck.HomeAssistant.Commands
+﻿namespace Loupedeck.HaPlugin.Commands
 {
     using System;
     using System.Collections.Generic;
 
-    using Loupedeck.HomeAssistant.Events;
+    using Loupedeck.HaPlugin;
+    using Loupedeck.HaPlugin.Events;
+    using Loupedeck.HaPlugin.Helpers;
 
     public abstract class BaseCommand : PluginDynamicCommand
     {

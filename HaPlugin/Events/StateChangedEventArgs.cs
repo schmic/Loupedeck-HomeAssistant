@@ -1,4 +1,4 @@
-﻿namespace Loupedeck.HomeAssistant.Events
+﻿namespace Loupedeck.HaPlugin.Events
 {
     using System;
 

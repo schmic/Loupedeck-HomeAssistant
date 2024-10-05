@@ -1,9 +1,11 @@
-﻿namespace Loupedeck.HomeAssistant.Commands
+﻿namespace Loupedeck.HaPlugin.Commands
 {
     using System;
     using System.Collections.Generic;
 
-    using Loupedeck.HomeAssistant.Events;
+    using Loupedeck.HaPlugin;
+    using Loupedeck.HaPlugin.Events;
+    using Loupedeck.HaPlugin.Helpers;
 
     public abstract class DualStateCommand : PluginMultistateDynamicCommand
     {
@@ -94,8 +96,8 @@
             var entity_friendly_name = states[entity_id].FriendlyName;
 
             var entity_img = isOn ?
-                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.GroupName.ToLower()}_{this.OnState}.png") :
-                EmbeddedResources.ReadImage($"Loupedeck.HomeAssistant.Resources.{this.GroupName.ToLower()}_{this.OffState}.png");
+                EmbeddedResources.ReadImage($"Loupedeck.HaPlugin.Resources.{this.GroupName.ToLower()}_{this.OnState}.png") :
+                EmbeddedResources.ReadImage($"Loupedeck.HaPlugin.Resources.{this.GroupName.ToLower()}_{this.OffState}.png");
 
             var bitmapBuilder = new BitmapBuilder(imageSize);
             bitmapBuilder.DrawImage(entity_img, bitmapBuilder.Width / 2 - entity_img.Width / 2, 4);

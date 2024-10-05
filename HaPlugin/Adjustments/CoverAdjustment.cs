@@ -1,7 +1,10 @@
-﻿namespace Loupedeck.HomeAssistant.Adjustments
+﻿namespace Loupedeck.HaPlugin.Adjustments
 {
     using System;
     using System.Collections.Generic;
+
+    using Loupedeck.HaPlugin;
+    using Loupedeck.HaPlugin.Helpers;
 
     using Newtonsoft.Json.Linq;
 

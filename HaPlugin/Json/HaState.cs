@@ -1,4 +1,4 @@
-﻿namespace Loupedeck.HomeAssistant.Json
+﻿namespace Loupedeck.HaPlugin.Json
 {
     using System;
 
