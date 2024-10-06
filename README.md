@@ -73,6 +73,10 @@ this plugin uses the same type of configuration but ignores any other configurat
 To get a token you have to log into your Home-Assistant, then go to your Profile page. At the bottom you can create a token.
 Someone explained it [here](https://community.home-assistant.io/t/how-to-get-long-lived-access-token/162159/5) as well.
 
+## Logs
+From Loupedeck 6.0+ onward you can find the plugin logs in:
+- `%LOCALAPPDATA%\Logi\LogiPluginService`
+
 ## Bugs & Issues
 - Climate Control, current state is WIP
   - visually different to others, no icons, no colors
