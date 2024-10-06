@@ -33,7 +33,16 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Condition="$(OS) == 'Windows_NT'" Command="echo $(OutputPath) &gt; &quot;$(PluginDir)$(ProjectName).link&quot;" />
     <Exec Condition="$(OS) != 'Windows_NT'" Command="echo $(OutputPath) &gt; $(PluginDir)$(ProjectName).link" />
-
+    
+    <RemoveDir Directories="$(OutputPath)win" />
+    <MakeDir Directories="$(OutputPath)win" />
+    <ItemGroup>
+      <FilesToMove Include="$(OutputPath)\*.dll" />
+      <FilesToMove Include="$(OutputPath)\HaPlugin.deps.json" />
+      <FilesToMove Include="$(OutputPath)\HaPlugin.pdb" />
+      <FilesToMove Include="$(OutputPath)\PluginApi.xml" />
+    </ItemGroup>
+    <Move SourceFiles="@(FilesToMove)" DestinationFolder="$(OutputPath)\win" />
   </Target>
 
   <Target Name="CopyMetadata" AfterTargets="PostBuildEvent">
@@ -48,6 +57,7 @@
     <Exec Condition="$(OS) != 'Windows_NT'" Command="rm -f $(PluginDir)$(ProjectName).link" />
 
     <RemoveDir Directories="$(OutputPath)metadata" />
+    <RemoveDir Directories="$(OutputPath)win" />
   </Target>
 
 </Project>
