@@ -3,7 +3,6 @@ namespace Loupedeck.HaPlugin
     using System;
     using System.Collections.Generic;
 
-    using Loupedeck.HaPlugin;
     using Loupedeck.HaPlugin.Events;
     using Loupedeck.HaPlugin.Json;
     using Loupedeck.HaPlugin.Helpers;
@@ -11,6 +10,8 @@ namespace Loupedeck.HaPlugin
     using Newtonsoft.Json.Linq;
 
     using Websocket.Client;
+    using System.Reactive.Linq;
+    using Newtonsoft.Json;
 
     public class HaPlugin : Plugin
     {
@@ -71,28 +72,19 @@ namespace Loupedeck.HaPlugin
         {
             PluginLog.Verbose($"SetupWebsocket(): [url: {url}] [token: {this.Token.Substring(0, 16)}...]");
             this.WebSocket = new WebsocketClient(url);
-            this.WebSocket.ReconnectTimeout = TimeSpan.FromSeconds(30);
-            
-            // if (url.AbsoluteUri.StartsWith("wss://"))
-            // {
-            //     this.WebSocket.SslConfiguration.EnabledSslProtocols = SslProtocols.None;
-            //     this.WebSocket.SslConfiguration.ServerCertificateValidationCallback = null;
-            // }
 
-            // this.WebSocket.OnError += this.OnErrorHdl;
+            this.WebSocket.ReconnectTimeout = TimeSpan.FromSeconds(15);
+            this.WebSocket.ErrorReconnectTimeout = TimeSpan.FromSeconds(15);
+            
+            this.WebSocket.ReconnectionHappened.Subscribe(info =>
+                PluginLog.Info($"Reconnection happened, type: {info.Type}"));
+            this.WebSocket.DisconnectionHappened.Subscribe(info => 
+                PluginLog.Info(info.Exception, $"Disconnect happened, type: {info.Type}"));
+
             this.WebSocket.MessageReceived.Subscribe(this.OnMessageHdl);
 
-            try
-            {
-                this.WebSocket.Start();
-            }
-            catch (Exception ex)
-            {
-                PluginLog.Error($"### Error: {ex.Message}\n{ex.InnerException}");
-            }
+            this.WebSocket.Start();
         }
-
-        // private void OnErrorHdl(Object sender, ErrorEventArgs e) => PluginLog.Error($"### Error: {e.Message}\n{e.Exception}");
 
         private void OnMessageHdl(ResponseMessage msg)
         {
@@ -105,16 +97,18 @@ namespace Loupedeck.HaPlugin
 
                 if (evtType.Equals("state_changed"))
                 {
-                    var haEvent = respData["event"]["data"].ToObject<HaEvent>();
-                    var haState = haEvent.State;
-                    //PluginLog.Verbose($"state_changed [{haState.Entity_Id}: {haState.State}]");
-                    this.States[haState.Entity_Id] = haState;
-                    this.StateChanged?.Invoke(null, StateChangedEventArgs.Create(haState.Entity_Id));
+                    try
+                    {
+                        var haEvent = respData["event"]["data"].ToObject<HaEvent>();
+                        var haState = haEvent.State;
+                        this.States[haState.Entity_Id] = haState;
+                        this.StateChanged?.Invoke(null, StateChangedEventArgs.Create(haState.Entity_Id));
+                    }
+                    catch (JsonSerializationException)
+                    {
+                        PluginLog.Warning($"JsonSerializationException HaEvent: {respData["event"]["data"]}");
+                    }
                 }
-                //else
-                //{
-                //    PluginLog.Verbose($"Unhandled HaEventType: {haEventType}\n{data}");
-                //}
             }
             else if (respType.Equals("result"))
             {
