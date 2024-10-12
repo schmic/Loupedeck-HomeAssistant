@@ -2,12 +2,10 @@
 {
     using System;
 
-    public class StateChangedEventArgs : EventArgs
+    public class StateChangedEventArgs(String Entity_Id) : EventArgs
     {
-        public String Entity_Id { get; }
+        public String Entity_Id { get; } = Entity_Id;
 
-        public StateChangedEventArgs(String Entity_Id) => this.Entity_Id = Entity_Id;
-
-        public static StateChangedEventArgs Create(String Entity_Id) => new StateChangedEventArgs(Entity_Id);
+        public static StateChangedEventArgs Create(String Entity_Id) => new(Entity_Id);
     }
 }
