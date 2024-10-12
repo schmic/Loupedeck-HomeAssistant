@@ -1,7 +1,5 @@
 ﻿namespace Loupedeck.HaPlugin.Json
 {
-    using System;
-
     using Newtonsoft.Json.Linq;
 
     public class HaEvent
