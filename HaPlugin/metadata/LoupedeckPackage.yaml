@@ -15,7 +15,7 @@ displayName: Home Assistant Websocket
 pluginFileName: HaPlugin.dll
 
 # Plugin version.
-version: 0.8.0
+version: 0.8.1
 
 # Author of the plugin. The author can be a company or an individual developer.
 author: schmic
@@ -53,7 +53,7 @@ pluginCapabilities:
     #- ActivatesApplication
 
 # Minimum Loupedeck version supported by the plugin.
-minimumLoupedeckVersion: 5.8
+minimumLoupedeckVersion: 6.0
 
 
 # ==================================================================================================
