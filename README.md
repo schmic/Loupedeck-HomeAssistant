@@ -44,6 +44,20 @@ Available for Windows and macOS (ARM64), tested with Loupedeck Live.
 
 ## Configuration
 
+### Using Helper Scripts
+The plugin comes with helper scripts to set up your configuration automatically:
+
+#### Windows (PowerShell)
+```powershell
+.\scripts\setup_config.ps1 -Token "your_token_here" [-Url "http://your.homeassistant.url:8123"]
+```
+
+#### macOS (Shell)
+```bash
+./scripts/setup_config.sh "your_token_here" ["http://your.homeassistant.url:8123"]
+```
+
+### Manual Configuration
 - Create the following path & file in your home folder:
   - Windows: `C:/Users/<USERNAME>/.loupedeck/homeassistant/homeassistant.json`
   - macOS: `~/.loupedeck/homeassistant/homeassistant.json`

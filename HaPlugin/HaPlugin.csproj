@@ -16,8 +16,10 @@
     <OutputPath>$(SolutionDir)build/bin/$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(SolutionDir)build/obj/$(Configuration)</IntermediateOutputPath>
 
-    <PluginApiDir Condition="$(OS) == 'Windows_NT'">C:\Program Files\Logi\LogiPluginService\</PluginApiDir>
-    <PluginApiDir Condition="$(OS) != 'Windows_NT'">/Applications/Loupedeck.app/Contents/MonoBundle/</PluginApiDir>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+
+
 
     <PluginDir Condition="$(OS) == 'Windows_NT'">$(LocalAppData)\Logi\LogiPluginService\Plugins\</PluginDir>
     <PluginDir Condition="$(OS) != 'Windows_NT'">~/Library/Application\ Support/Logi/LogiPluginService/Plugins/</PluginDir>
@@ -41,15 +43,21 @@
     <EmbeddedResource Include="Resources\switch_on.png" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <PluginApiPath Condition="$(OS) == 'Windows_NT'">C:\Program Files\Logi\LogiPluginService\PluginApi.dll</PluginApiPath>
+    <PluginApiPath Condition="$(OS) != 'Windows_NT'">/Applications/Utilities/LogiPluginService.app/Contents/MonoBundle/PluginApi.dll</PluginApiPath>
+    <NoWarn>CS0579</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="PluginApi">
-      <HintPath>$(PluginApiDir)PluginApi.dll</HintPath>
+      <HintPath>$(PluginApiPath)</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
 
   <Target Name="CopyPluginApiFiles" BeforeTargets="Build">
-    <Copy SourceFiles="$(PluginApiDir)PluginApi.dll" DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="$(PluginApiPath)" DestinationFolder="$(OutputPath)" />
   </Target>
 
   <ItemGroup>
