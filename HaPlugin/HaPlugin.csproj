@@ -5,15 +5,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <RootNamespace>Loupedeck.HaPlugin</RootNamespace>
+    <RuntimeIdentifiers>win-x64;osx-arm64;osx-x64</RuntimeIdentifiers>
+    <Platform>AnyCPU</Platform>
 
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
 
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <OutputPath>$(SolutionDir)build/bin/$(Configuration)</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)build/obj/$(Configuration)</IntermediateOutputPath>
 
     <PluginApiDir Condition="$(OS) == 'Windows_NT'">C:\Program Files\Logi\LogiPluginService\</PluginApiDir>
-    <PluginApiDir Condition="$(OS) != 'Windows_NT'">/Applications/Utilities/LogiPluginService.app/Contents/MonoBundle/</PluginApiDir>
+    <PluginApiDir Condition="$(OS) != 'Windows_NT'">/Applications/Loupedeck.app/Contents/MonoBundle/</PluginApiDir>
 
     <PluginDir Condition="$(OS) == 'Windows_NT'">$(LocalAppData)\Logi\LogiPluginService\Plugins\</PluginDir>
     <PluginDir Condition="$(OS) != 'Windows_NT'">~/Library/Application\ Support/Logi/LogiPluginService/Plugins/</PluginDir>
@@ -40,8 +44,13 @@
   <ItemGroup>
     <Reference Include="PluginApi">
       <HintPath>$(PluginApiDir)PluginApi.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
+
+  <Target Name="CopyPluginApiFiles" BeforeTargets="Build">
+    <Copy SourceFiles="$(PluginApiDir)PluginApi.dll" DestinationFolder="$(OutputPath)" />
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -49,18 +58,12 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <!-- <Exec Condition="$(OS) == 'Windows_NT'" Command="echo $(OutputPath) &gt; &quot;$(PluginDir)$(ProjectName).link&quot;" /> -->
-    <!-- <Exec Condition="$(OS) != 'Windows_NT'" Command="echo $(OutputPath) &gt; $(PluginDir)$(ProjectName).link" /> -->
-    
-    <RemoveDir Directories="$(OutputPath)win" />
-    <MakeDir Directories="$(OutputPath)win" />
     <ItemGroup>
       <FilesToMove Include="$(OutputPath)\*.dll" />
       <FilesToMove Include="$(OutputPath)\HaPlugin.deps.json" />
       <FilesToMove Include="$(OutputPath)\HaPlugin.pdb" />
-      <FilesToMove Include="$(OutputPath)\PluginApi.xml" />
     </ItemGroup>
-    <Move SourceFiles="@(FilesToMove)" DestinationFolder="$(OutputPath)\win" />
+    <Copy SourceFiles="@(FilesToMove)" DestinationFolder="$(OutputPath)\osx-arm64" />
   </Target>
 
   <Target Name="CopyMetadata" AfterTargets="PostBuildEvent">

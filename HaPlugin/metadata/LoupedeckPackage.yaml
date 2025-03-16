@@ -15,10 +15,10 @@ displayName: Home Assistant Websocket
 pluginFileName: HaPlugin.dll
 
 # Plugin version.
-version: 0.8.0
+version: 0.9.0
 
 # Author of the plugin. The author can be a company or an individual developer.
-author: schmic
+author: lmasiero
 
 # Copyright information.
 copyright: Copyright © 2024 . All rights reserved.
@@ -34,7 +34,7 @@ pluginFolderWin: win
 
 # Location of plugin files on macOS (relative to the plugin base directory).
 # This parameter is required to support Mac.
-#pluginFolderMac: mac
+pluginFolderMac: osx-arm64
 
 # List of supported devices.
 supportedDevices:
@@ -70,7 +70,7 @@ licenseUrl: https://opensource.org/licenses/MIT
 # URL of the support page where the users can send improvement suggestions and report bugs.
 # The URL is shown in Loupedeck Marketplace. The page can be for example a GitHub issues page.
 # NOTE: This setting is recommended when publishing the plugin in Loupedeck Marketplace.
-supportPageUrl: https://github.com/schmic/Loupedeck-HomeAssistant/issues
+supportPageUrl: https://github.com/lmasiero/Loupedeck-HomeAssistant/issues
 
 # URL of the plugin homepage. The URL is shown in Loupedeck Marketplace.
-homePageUrl: https://github.com/schmic/Loupedeck-HomeAssistant
+homePageUrl: https://github.com/lmasiero/Loupedeck-HomeAssistant
