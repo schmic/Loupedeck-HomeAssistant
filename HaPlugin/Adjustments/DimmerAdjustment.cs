@@ -46,30 +46,30 @@
 
         private Boolean IsDimmer(HaState state) => state.Entity_Id.StartsWith("light.") && state.Attributes.ContainsKey("brightness");
 
-        protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize)
+        protected override String GetCommandDisplayName(String entity_id, PluginImageSize imageSize)
         {
-            if (actionParameter.IsNullOrEmpty())
+            if (entity_id.IsNullOrEmpty())
             { return null; }
 
-            var entityState = this.plugin.States[actionParameter];
+            var entityState = this.plugin.States[entity_id];
             return $"{entityState.FriendlyName}";
         }
 
-        protected override String GetAdjustmentDisplayName(String actionParameter, PluginImageSize imageSize)
+        protected override String GetAdjustmentDisplayName(String entity_id, PluginImageSize imageSize)
         {
-            if (actionParameter.IsNullOrEmpty())
+            if (entity_id.IsNullOrEmpty())
             { return null; }
 
-            var entityState = this.plugin.States[actionParameter];
+            var entityState = this.plugin.States[entity_id];
             return $"{entityState.FriendlyName}";
         }
 
-        protected override String GetAdjustmentValue(String actionParameter)
+        protected override String GetAdjustmentValue(String entity_id)
         {
-            if (actionParameter.IsNullOrEmpty())
+            if (entity_id.IsNullOrEmpty())
             { return null; }
 
-            var entityState = this.plugin.States[actionParameter];
+            var entityState = this.plugin.States[entity_id];
             Int32.TryParse(entityState?.Attributes["brightness"]?.ToString(), out var entityValue);
 
             return entityValue.ToString();
