@@ -1,6 +1,6 @@
 # Loupedeck-HomeAssistant
 
-This plugin enables you to control various [Home-Assitant](https://home-assistant.io) entities with your Loupedeck.
+This plugin enables you to control various [Home-Assistant](https://home-assistant.io) entities with your Loupedeck.
 
 Supported entities:
 - Automations
