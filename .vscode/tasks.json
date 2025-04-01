@@ -1,15 +1,163 @@
 {
 	"version": "2.0.0",
 	"tasks": [
-		{
-			"type": "dotnet",
-			"task": "build",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"problemMatcher": [],
-			"label": "dotnet: build"
+	  {
+		"label": "stop-loupedeck",
+		"type": "shell",
+		// "dependsOn": ["stop-pluginservice"],
+		"osx": {
+		  "command": "/usr/bin/pkill -x Loupedeck"
+		},
+		"windows": {
+		  "command": "Taskkill /IM \"Loupedeck.exe\" /T /F"
 		}
+	  },
+	  {
+		"label": "stop-pluginservice",
+		"type": "shell",
+		"osx": {
+		  "command": "/usr/bin/pkill -x LogiPluginService"
+		},
+		"windows": {
+		  "command": "Taskkill /IM \"LogiPluginService.exe\" /T /F"
+		}
+	  },
+	  {
+		"label": "debug-plugin",
+		"osx": {
+		  // "command": "/Applications/Loupedeck.app/Contents/MacOS/Loupedeck"
+		  "command": "/Applications/Utilities/LogiPluginService.app/Contents/MacOS/LogiPluginService"
+		},
+		"windows": {
+		  "command": "wt 'C:\\Program Files\\Logi\\LogiPluginService\\LogiPluginService.exe'"
+		  // "command": "wt 'C:\\Program Files (x86)\\Loupedeck\\Loupedeck2\\configui2\\Loupedeck.exe'"
+		},
+		"type": "shell",
+		"dependsOn": [
+		  "build-debug"
+		],
+		"isBackground": true,
+		"problemMatcher": {
+		  "owner": "custom",
+		  "fileLocation": [
+			"absolute"
+		  ],
+		  "pattern": [
+			{
+			  "regexp": "^\\d{4}-\\d{2}-\\d{2}T(\\d{2}-\\d{2}-\\d{2})-(\\d+) \\|\\s+(\\d+) \\|\\s+([A-Z]+) \\|\\s+(.*)$",
+			  "severity": 4,
+			  "line": 0,
+			  "column": 1,
+			  "message": 5,
+			  "code": 4
+			},
+			{
+			  "regexp": "^\\d{2}-\\d{2}-\\d{2}-(\\d+) \\[CN\\] File name is '(.*)'",
+			  "file": 2,
+			  "message": 2
+			},
+			{
+			  "regexp": "^\\d{2}-\\d{2}-\\d{2}-(\\d+) \\[WS\\] (.*)$",
+			  "message": 2
+			},
+			{
+			  "regexp": "^\\d{2}-\\d{2}-\\d{2}-(\\d+) Waiting \\(locking\\) main thread\\.\\.\\.$",
+			  "message": 0
+			}
+		  ],
+		  "background": {
+			"activeOnStart": true,
+			"beginsPattern": "^\\d{2}-\\d{2}-\\d{2}-(\\d+) Initializing Loupedeck connection",
+			"endsPattern": "^\\d{2}-\\d{2}-\\d{2}-(\\d+) Waiting \\(locking\\) main thread\\.\\.\\.$"
+		  }
+		}
+	  },
+	  {
+		"label": "build-debug",
+		"type": "shell",
+		"command": "dotnet",
+		"osx": {
+		  "args": [
+			"build",
+			"${workspaceFolder}/HomeAssistant.sln", // Adjust to your path
+			"/property:GenerateFullPaths=true",
+			"/consoleloggerparameters:NoSummary",
+			"/p:Configuration=Debug",
+			"/p:Platform=\"Any CPU\""
+		  ]
+		},
+		"windows": {
+		  "args": [
+			"build",
+			"${workspaceFolder}\\HomeAssistant.sln", // Adjust to your path
+			"/property:GenerateFullPaths=true",
+			"/consoleloggerparameters:NoSummary",
+			"/p:Configuration=Debug"
+		  ]
+		},
+		"problemMatcher": "$msCompile"
+	  },
+	  {
+		"label": "build-release",
+		"command": "dotnet",
+		"type": "shell",
+		"osx": {
+		  "args": [
+			"build",
+			"${workspaceFolder}/HomeAssistant.sln", // Adjust to your path
+			"/property:GenerateFullPaths=true",
+			"/consoleloggerparameters:NoSummary",
+			"/p:Configuration=Release",
+			"/p:Platform=\"Any CPU\""
+		  ]
+		},
+		"windows": {
+		  "args": [
+			"build",
+			"${workspaceFolder}\\HomeAssistant.sln", // Adjust to your path
+			"/property:GenerateFullPaths=true",
+			"/consoleloggerparameters:NoSummary",
+			"/p:Configuration=Release"
+		  ]
+		},
+		"problemMatcher": "$msCompile"
+	  },
+	  {
+		  "label": "build",
+		  "command": "dotnet",
+		  "type": "process",
+		  "args": [
+			  "build",
+			  "${workspaceFolder}/HomeAssistant.sln",
+			  "/property:GenerateFullPaths=true",
+			  "/consoleloggerparameters:NoSummary;ForceNoAlign"
+		  ],
+		  "problemMatcher": "$msCompile"
+	  },
+	  {
+		  "label": "publish",
+		  "command": "dotnet",
+		  "type": "process",
+		  "args": [
+			  "publish",
+			  "${workspaceFolder}/HomeAssistant.sln",
+			  "/property:GenerateFullPaths=true",
+			  "/consoleloggerparameters:NoSummary;ForceNoAlign"
+		  ],
+		  "problemMatcher": "$msCompile"
+	  },
+	  {
+		  "label": "watch",
+		  "command": "dotnet",
+		  "type": "process",
+		  "args": [
+			  "watch",
+			  "run",
+			  "--project",
+			  "${workspaceFolder}/HomeAssistant.sln"
+		  ],
+		  "problemMatcher": "$msCompile"
+	  }
 	]
-}
+  }
+  
