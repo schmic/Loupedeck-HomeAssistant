@@ -70,8 +70,7 @@
             { return null; }
 
             var entityState = this.plugin.States[entity_id];
-            Int32.TryParse(entityState?.Attributes["brightness"]?.ToString(), out var entityValue);
-
+            var entityValue = AsInt(entityState, "brightness");
             return entityValue.ToString();
         }
 
@@ -81,10 +80,10 @@
             { return; }
 
             var entityState = this.plugin.States[entity_id];
-            Int32.TryParse(entityState.Attributes["brightness"]?.ToString(), out var entityValue);
+            var entityValue = AsInt(entityState, "brightness");
             var brightness = entityValue + value;
 
-            PluginLog.Verbose($"{entity_id} {entityValue} => {brightness}");
+            PluginLog.Verbose($"{entity_id} brightness {entityValue} => {brightness}");
 
             this.plugin.States[entity_id].Attributes["brightness"] = brightness.ToString();
 
@@ -107,6 +106,13 @@
             };
 
             this.plugin.CallService(data);
+        }
+
+        private static Int32 AsInt(HaState entityState, String attributeName)
+        {
+            var entityValueF = Convert.ToSingle(entityState.Attributes[attributeName].ToString());
+            var entityValue = Convert.ToInt32(entityValueF);
+            return entityValue;
         }
     }
 }
