@@ -15,7 +15,7 @@ displayName: Home Assistant Websocket
 pluginFileName: HaPlugin.dll
 
 # Plugin version.
-version: 0.8.1
+version: 0.9
 
 # Author of the plugin. The author can be a company or an individual developer.
 author: schmic
